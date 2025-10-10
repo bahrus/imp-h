@@ -1,0 +1,20 @@
+{
+  "name": "imp-h",
+  "version": "0.0.0",
+  "description": "",
+  "homepage": "https://github.com/bahrus/imp-h#readme",
+  "bugs": {
+    "url": "https://github.com/bahrus/imp-h/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bahrus/imp-h.git"
+  },
+  "license": "MIT",
+  "author": "Bruce B. Anderson <anderson.bruce.b@gmail.com>",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
