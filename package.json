@@ -6,6 +6,10 @@
   "bugs": {
     "url": "https://github.com/bahrus/imp-h/issues"
   },
+  "devDependencies": {
+    "spa-ssi": "0.0.23",
+    "@playwright/test": "1.56.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bahrus/imp-h.git"
@@ -15,6 +19,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "serve": "node ./node_modules/spa-ssi/serve.js",
+    "test": "playwright test",
+    "safari": "npx playwright wk http://localhost:8000",
+    "update": "ncu -u && npm install"
   }
 }

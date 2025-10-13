@@ -1,7 +1,19 @@
 <html>
+    <head>
+        <script type=importmap>
+            {
+                "imports": {
+                    "my-package/": "/"
+                }
+            }           
+        </script>
+    </head>
     <body>
-        <div id="test"></div>
+        <my-html-based-web-component imp-h="my-package/root.html"></my-html-based-web-component>
 
-        <div src="#test"></div>
+
+        <script type=module>
+            import '/imp-h.js';
+        </script>
     </body>
 </html>
