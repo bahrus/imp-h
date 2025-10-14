@@ -17,7 +17,12 @@
   "license": "MIT",
   "author": "Bruce B. Anderson <anderson.bruce.b@gmail.com>",
   "type": "module",
-  "main": "index.js",
+  "main": "imp-h.js",
+  "module": "imp-h.js",
+  "exports":{
+    "./imp-h.js": "./imp-h.js",
+    ".": "./imp-h.js"
+  },
   "scripts": {
     "serve": "node ./node_modules/spa-ssi/serve.js",
     "test": "playwright test",
