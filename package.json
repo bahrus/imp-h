@@ -1,6 +1,6 @@
 {
   "name": "imp-h",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "homepage": "https://github.com/bahrus/imp-h#readme",
   "bugs": {
@@ -19,7 +19,7 @@
   "type": "module",
   "main": "imp-h.js",
   "module": "imp-h.js",
-  "exports":{
+  "exports": {
     "./imp-h.js": "./imp-h.js",
     ".": "./imp-h.js"
   },
