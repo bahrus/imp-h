@@ -18,14 +18,14 @@
  */
 function resolveWithImportMap(specifier) {
   // Get the import map from the document
-  const importMapScript = document.querySelector('script[type="importmap"]');
+  const importMapScripts = Array.from(document.querySelectorAll('script[type="importmap"]'));
   
-  if (!importMapScript) {
+  if (importMapScripts.length === 0) {
     // No import map, return specifier as-is
     return specifier;
   }
   
-  try {
+  for(const importMapScript of importMapScripts){
     const importMap = JSON.parse(importMapScript.textContent);
     const imports = importMap.imports || {};
     
@@ -41,13 +41,12 @@ function resolveWithImportMap(specifier) {
         return specifier.replace(key, value);
       }
     }
-    
-    // No match found, return original specifier
-    return specifier;
-  } catch (error) {
-    console.warn('Failed to parse import map:', error);
-    return specifier;
   }
+
+    
+  // No match found, return original specifier
+  return specifier;
+  
 }
 
 // Find all elements with imp-h attribute
