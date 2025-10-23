@@ -78,7 +78,7 @@ elements.forEach(async (element) => {
     const endMarker = '<!--end-->';
     
     const beginIndex = html.indexOf(beginMarker);
-    const endIndex = html.indexOf(endMarker);
+    const endIndex = html.lastIndexOf(endMarker);
     
     if (beginIndex === -1 || endIndex === -1) {
       throw new Error(`Could not find begin/end markers in ${resolvedPath}`);
