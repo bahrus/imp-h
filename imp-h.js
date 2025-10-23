@@ -53,6 +53,7 @@ function resolveWithImportMap(specifier) {
 const elements = document.querySelectorAll('[imp-h]');
 
 elements.forEach(async (element) => {
+  if(!(element instanceof HTMLElement)) return;
   const htmlPath = element.getAttribute('imp-h');
   
   if (!htmlPath) {
@@ -86,14 +87,22 @@ elements.forEach(async (element) => {
     
     // Extract the content between the markers
     const content = html.substring(beginIndex + beginMarker.length, endIndex).trim();
+    const templ = document.createElement('template');
+    
+    templ.innerHTML = content;
+    
     
     // Create shadow DOM if it doesn't exist
     if (!element.shadowRoot) {
       element.attachShadow({ mode: 'open' });
     }
+    const clone = templ.content.cloneNode(true);
+    element.shadowRoot?.appendChild(clone);
+    const id = `a-${crypto.randomUUID()}`;
+    templ.id = id;
+    element.dataset.impH = id; 
+    document.head.appendChild(templ);
     
-    // Insert the content into the shadow DOM
-    element.shadowRoot.innerHTML = content;
     
   } catch (error) {
     console.error(`Error loading HTML for element:`, element, error);
