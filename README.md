@@ -1,6 +1,6 @@
 # imp-h
 
-For small, html based web components, the benefits of streaming and ShadowDOM support of be-importing is outweighed by all the dependencies / code needed.  But for declarative web components, the delay in just rendering the unhydrated html makes that delay not worth it.
+For small, html based web components, the benefits of streaming and ShadowDOM support of [pipe-in](https://github.com/bahrus/pipe-in) is outweighed by all the dependencies / code needed.  But for declarative web components, the delay in just rendering the unhydrated html makes that delay not worth it.
 
 So this is a bare bones version of be-importing.
 
@@ -35,9 +35,9 @@ In the imported node_modules/my-package, it looks for file root.html, and within
     <head>
     </head>
     <body>
-        <!-- begin -->
+        <?start>
         <div>my content</div>
-        <!-- end -->
+        <?end>
     </body>
 </html>
 ```

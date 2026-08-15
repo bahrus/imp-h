@@ -75,8 +75,8 @@ elements.forEach(async (element) => {
     const html = await response.text();
     
     // Extract content between <!-- begin --> and <!-- end -->
-    const beginMarker = '<!--begin-->';
-    const endMarker = '<!--end-->';
+    const beginMarker = '<?start>';
+    const endMarker = '<?end>';
     
     const beginIndex = html.indexOf(beginMarker);
     const endIndex = html.lastIndexOf(endMarker);
