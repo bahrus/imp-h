@@ -29,7 +29,7 @@ Yes, the same `precede` → `cede` handoff can be supported by `imp-h`, but the 
 ### What `imp-h` currently does
 
 1. It finds elements with `imp-h` and fetches the referenced HTML file.
-2. It extracts the content between `<!--begin-->` and `<!--end-->` markers.
+2. It extracts the content between `<?start>` and `<?end>` markers.
 3. It creates a `<template>` from that content.
 4. It clones the template into the element's shadow root.
 5. It stores the template in `<head>` and records its id on `element.dataset.impH`.
@@ -41,7 +41,7 @@ There is no streaming, no URL rewriting, no sanitizer, and no memoization/sharin
 The natural equivalent of `pipe-in`'s behavior is:
 
 1. When `imp-h` processes an element whose `localName` includes a dash, check for a child `<script type="precede">`.
-2. If found, build the template from the extracted `<!--begin-->`/`<!--end-->` content (the same string already used to populate the shadow root).
+2. If found, build the template from the extracted `<?start>` / `<?end>` content (the same string already used to populate the shadow root).
 3. Attach that template to the script element with `Symbol.for('imp-h:template')` — or reuse `Symbol.for('pipe-in:template')` if we want cross-library consistency.
 4. Flip the script's `type` from `precede` to `cede` so that `templ-maker` / `mount-observer` proceeds with custom-element registration.
 
@@ -109,3 +109,40 @@ But `imp-h` already has the parsed `templ`, so returning it directly is simpler 
 ### Bottom line
 
 The precede/cede protocol ports cleanly to `imp-h` with a small addition: detect the `precede` child script, attach the already-built template under a symbol, and flip the type. The only significant decision is whether to use a library-specific symbol (`imp-h:template`) or share `pipe-in:template`. I lean toward the library-specific symbol for honesty, with `templ-maker` checking both.
+
+---
+
+## Human Response I
+
+First, apologies.  I didn't have the latest code for imp-h.  The start and end markers have changed to be more consistent with pipe-in.
+
+Let's go with your recommendations.  Please implement, and add your implementation notes below.
+
+
+---
+
+## Implementation Notes
+
+Implemented in `imp-h/imp-h.js`:
+
+- After fetching the HTML and extracting the content between `<?start>` and `<?end>`, `imp-h` builds a `<template>` and clones it into the element's shadow root as before.
+- If the enhanced element is a custom element (`element.localName.includes('-')`) and has a child `<script type="precede">`, the script is handed the template:
+  ```js
+  Object.defineProperty(precedeScript, Symbol.for('imp-h:template'), {
+    value: templ,
+    configurable: true
+  });
+  precedeScript.setAttribute('type', 'cede');
+  ```
+- The template is the same object that was populated from the fetched HTML and appended to `<head>`, so no double-parse occurs.
+- The `precede` → `cede` flip triggers `mount-observer`-based custom element registration, just as it does for `pipe-in`.
+
+Also updated `imp-h/README.md` to:
+
+- Correct the marker description from "xml comments begin and end" to `<?start>` / `<?end>`.
+- Document the new custom element template handoff section.
+
+### Notes
+
+- No tests were present in the repo, so the change was verified by reading the code path and confirming the markers already match the new `<?start>` / `<?end>` convention.
+- `imp-h` remains dependency-free; the precede handoff is a small, synchronous addition after the existing template creation.

@@ -6,9 +6,11 @@
 
 /**
  * imp-h.js - Bare bones HTML importer for web components
- * Imports HTML content between <!-- begin --> and <!-- end --> comments
- * into the shadow DOM of elements with imp-h attribute
- * Supports import map resolution for HTML paths
+ * Imports HTML content between <?start> and <?end> markers
+ * into the shadow DOM of elements with imp-h attribute.
+ * Supports import map resolution for HTML paths.
+ * On custom elements containing a <script type="precede"> child,
+ * hands off the template and flips the script type to "cede".
  */
 
 /**
@@ -74,7 +76,7 @@ elements.forEach(async (element) => {
     
     const html = await response.text();
     
-    // Extract content between <!-- begin --> and <!-- end -->
+    // Extract content between <?start> and <?end> markers
     const beginMarker = '<?start>';
     const endMarker = '<?end>';
     
@@ -102,6 +104,18 @@ elements.forEach(async (element) => {
     templ.id = id;
     element.dataset.impH = id; 
     document.head.appendChild(templ);
+    
+    // Hand off template to a precede script for custom element registration
+    if (element.localName.includes('-')) {
+      const precedeScript = element.querySelector('script[type="precede"]');
+      if (precedeScript) {
+        Object.defineProperty(precedeScript, Symbol.for('imp-h:template'), {
+          value: templ,
+          configurable: true
+        });
+        precedeScript.setAttribute('type', 'cede');
+      }
+    }
     
     
   } catch (error) {
